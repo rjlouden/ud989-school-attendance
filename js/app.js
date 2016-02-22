@@ -62,14 +62,19 @@ var view =  {
 		for (var i=0; i<daysChecked.length;++i){
 			$(daysChecked[i])[0].checked=attendance[i];
 		}
-		
+
+		this.renderMissed(studentID,attendance);		
+		//	attendance.push($(daysChecked[i]).prop("checked"));
+	},
+	renderMissed: function(studentID, attendance){
 		var missed = attendance.reduce(function(n, val) {
 			return n + (val === false);
 		}, 0);
 		
+		var row = document.getElementById("row-"+studentID);
+		
 		$(row).children("td")[octopus.getNumberDays()+1].textContent=missed;
 		
-		//	attendance.push($(daysChecked[i]).prop("checked"));
 	},
 	onClick: function(event){
 		var idArray = event.currentTarget.id.split("-");
@@ -79,7 +84,7 @@ var view =  {
 		var attendance = octopus.getThisAttendance(currentStudent);
 		attendance[currentDay-1]=event.target.checked;
 		octopus.updateAStudentAttendance(currentStudent,attendance);
-		view.renderStudent(currentStudent, attendance);
+		view.renderMissed(currentStudent, attendance);
 	}
 }
 
